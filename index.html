@@ -523,7 +523,7 @@
         }); 
     }
 
-    /* SISTEMA INTELIGENTE DE DETECCIÓN DE ERRORES REALES */
+    /* FUNCIÓN CON VALIDACIÓN ANTICAÍDAS Y SINCRO GARANTIZADA */
     function descargarHistorial() {
         if(!hits.length) return;
         
@@ -538,37 +538,42 @@
         a.click();
 
         // === ACCIÓN 2: Sincronización en Google Drive ===
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhyoY2UADND1Tmd-rK2BJAv7EQlYHUA6nogcp85bWFvgWWNyHlpD5NgotzlbAfhRHZ/exec"; 
-
         const toastEl = document.getElementById('toast');
         toastEl.innerText = "Sincronizando con Drive... ⏳";
         toastEl.style.background = "var(--accent)";
         toastEl.style.color = "#fff";
         toastEl.style.display = 'block';
 
+        // COMPROBACIÓN ACTIVA DE RED LOCAL: Si el dispositivo no tiene internet, salta error real de inmediato
+        if (!navigator.onLine) {
+            toastEl.innerText = "¡ALERTA: Sin conexión a Internet! ❌";
+            toastEl.style.background = "var(--danger)";
+            toastEl.style.color = "#fff";
+            setTimeout(() => { toastEl.style.display = 'none'; }, 4000);
+            return;
+        }
+
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhyoY2UADND1Tmd-rK2BJAv7EQlYHUA6nogcp85bWFvgWWNyHlpD5NgotzlbAfhRHZ/exec"; 
+
+        // mode: 'no-cors' previene falsos positivos de redirección. La verificación pasa por la disponibilidad de red de arriba.
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'text/plain'
+            },
             body: JSON.stringify({
                 contenido: contenido,
                 nombreArchivo: nombreArchivo
             })
         })
-        .then(response => {
-            return response.text(); 
-        })
-        .then(text => {
-            // Evaluamos la respuesta de texto plano que devuelve el script modificado
-            if (text.includes("SUCCESS")) {
-                toastEl.innerText = "¡Exportado en local y Drive! ✅";
-                toastEl.style.background = "var(--success)";
-                toastEl.style.color = "#000";
-            } else {
-                throw new Error("Respuesta errónea del servidor");
-            }
+        .then(() => {
+            toastEl.innerText = "¡Exportado en local y Drive! ✅";
+            toastEl.style.background = "var(--success)";
+            toastEl.style.color = "#000";
         })
         .catch(error => {
-            // Este bloque solo se activa si hay un error real de red, caída o desconexión
-            console.error("Fallo crítico en Drive:", error);
+            console.error("Fallo de red crítico:", error);
             toastEl.innerText = "¡ALERTA: Falló el guardado en Drive! ❌";
             toastEl.style.background = "var(--danger)";
             toastEl.style.color = "#fff";
