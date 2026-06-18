@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Culqi By DQ v2.1 ✅</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
+    
+    <style>
+        /* SISTEMA DE DISEÑO COMPACTO, UNIFORME Y CENTRADO */
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --border: #222;
+            --btn-border: #ffffff;
+            --accent: #2196F3;
+            --success: #00e676;
+            --danger: #ff1744;
+            --warning: #ffd600;
+            --gap: 12px;
+            --radius: 10px;
+            --main-width: 500px;
+        }
+
+        body.light-mode {
+            --bg: #ffffff;
+            --surface: #f7f7f7;
+            --text: #1a1a1a;
+            --text-dim: #666;
+            --border: #ddd;
+            --btn-border: #808080;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+            width: 100%;
+            max-width: var(--main-width);
+        }
+
+        .card { 
+            background: var(--surface); 
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px; 
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+
+        h2 { 
+            text-align: center; 
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            user-select: none;
+        }
+
+        .btn-select {
+            background: transparent !important;
+            border: 1px solid var(--btn-border) !important;
+            color: var(--text) !important;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            border-radius: 8px;
+        }
+        .btn-select.active {
+            border-color: var(--accent) !important;
+            border-width: 2px !important;
+        }
+
+        select {
+            background-color: var(--surface) !important;
+            color: var(--text) !important;
+            border: 1px solid var(--btn-border);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .time-setter-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .time-label { font-size: 0.8rem; font-weight: bold; }
+
+        .time-input-custom {
+            background: transparent !important;
+            border: 1px solid var(--btn-border) !important;
+            color: var(--text) !important;
+            font-size: 0.8rem;
+            padding: 4px 6px;
+            width: 75px;
+            text-align: center;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .time-input-custom::-webkit-calendar-picker-indicator {
+            display: none !important;
+            -webkit-appearance: none;
+        }
+        .time-input-custom::-webkit-inner-spin-button {
+            display: none !important;
+            -webkit-appearance: none;
+        }
+
+        .timers-row { display: flex; gap: var(--gap); width: 100%; }
+        .timer-card { 
+            flex: 1; 
+            background: var(--surface); 
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px; 
+            text-align: center; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+        }
+        .label-s { font-size: 0.6rem; font-weight: bold; color: var(--text-dim); text-transform: uppercase; }
+        .clock-v { font-family: 'Consolas', monospace; font-size: 1.5rem; font-weight: bold; }
+        .c-eod { color: var(--success); }
+        .c-break { color: var(--accent); }
+
+        .timer-actions { display: flex; justify-content: center; gap: 8px; }
+        .btn-t-emoji { width: 36px; height: 36px; border-radius: 8px; font-size: 1.1rem; border: none; cursor: pointer; transition: 0.2s; }
+        .btn-reset { background: var(--danger); color: white; border: none; padding: 6px; border-radius: 6px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; cursor: pointer; width: 100%; }
+
+        .mode-row { display: flex; gap: 8px; }
+        .btn-mode { flex: 1; padding: 8px; font-size: 0.7rem; border-radius: 6px; font-weight: bold; }
+
+        .speech-area { display: flex; align-items: center; gap: 8px; }
+        .nav-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; opacity: 0.5; padding: 5px; }
+        
+        .speech-box { 
+            flex: 1; padding: 12px; min-height: 80px; border-radius: 8px; 
+            border: 1px solid var(--border); cursor: pointer; border-left: 3px solid var(--accent);
+        }
+        .s-title { font-size: 0.55rem; color: var(--accent); font-weight: bold; margin-bottom: 4px; display: block; }
+        .s-text { font-size: 0.85rem; line-height: 1.4; }
+
+        .controls-row { display: flex; justify-content: center; gap: 16px; align-items: center; }
+        .emoji-group { display: flex; gap: 6px; }
+        .btn-emoji { width: 34px; height: 34px; border-radius: 50%; font-size: 1rem; }
+        .btn-sq { border-radius: 6px; }
+
+        .f-row { display: flex; gap: var(--gap); }
+        .f-field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .f-label { font-size: 0.6rem; font-weight: bold; color: var(--text-dim); text-transform: uppercase; cursor: pointer; }
+        
+        input, select, textarea { 
+            padding: 10px; border: 1px solid var(--border); border-radius: 8px; 
+            background: transparent; color: var(--text); font-size: 0.85rem; width: 100%;
+        }
+        textarea { height: 55px; resize: none; }
+
+        .btn-add { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; text-transform: uppercase; cursor: pointer; font-size: 0.8rem; }
+
+        .hist-view { 
+            padding: 12px; font-family: 'Consolas', monospace; 
+            font-size: 0.75rem; height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;
+        }
+
+        .footer-actions { 
+            display: flex; 
+            flex-direction: row; 
+            gap: 8px; 
+        }
+        .btn-foot { 
+            flex: 1;
+            padding: 10px 2px; 
+            border-radius: 8px; 
+            border: none; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            font-size: 0.58rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        #toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: #000; 
+            padding: 12px 24px; border-radius: 30px; font-weight: bold; display: none; 
+            z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Copiado con éxito</div>
+
+    <div class="dashboard-wrapper">
+        <div class="timers-row">
+            <div class="timer-card">
+                <span class="label-s">Salida 🏠</span>
+                <div id="eodDisplay" class="clock-v c-eod">00:00:00</div>
+                <div class="time-setter-wrapper">
+                    <span class="time-label">Hora:</span>
+                    <input type="time" id="eodTime" class="time-input-custom" onchange="updateEODTarget()">
+                </div>
+            </div>
+            <div class="timer-card">
+                <div id="display" class="clock-v c-break">00:00:00</div>
+                <div class="timer-actions">
+                    <button class="btn-t-emoji" title="Corto (45s)" style="background:#00bcd4;" onclick="startTimer(45)">⏳</button>
+                    <button class="btn-t-emoji" title="Almuerzo (1h)" style="background:var(--accent);" onclick="startTimer(3600)">🍔</button>
+                    <button class="btn-t-emoji" title="SS.HH (10m)" style="background:#607d8b;" onclick="startTimer(600)">🚽</button>
+                </div>
+                <button id="btnStop" class="btn-reset" onclick="stopTimer()" style="display:none; margin-top:4px;">Reset</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 onclick="toggleTheme()">Atención a Comercios</h2>
+            
+            <div class="mode-row">
+                <button id="btnPers" class="btn-select btn-mode active" onclick="setModo('pers')">Personalizado</button>
+                <button id="btnGen" class="btn-select btn-mode" onclick="setModo('gen')">General</button>
+            </div>
+
+            <div class="f-row" id="inputNombreRow">
+                <div class="f-field" style="max-width: 80px;">
+                    <label class="f-label">Trato</label>
+                    <select id="prefijo" onchange="actualizarSpeeches()">
+                        <option value="Sr.">Sr.</option>
+                        <option value="Sra.">Sra.</option>
+                        <option value="Srta.">Srta.</option>
+                    </select>
+                </div>
+                <div class="f-field">
+                    <label class="f-label">Nombre o Apellido</label>
+                    <input type="text" id="nombreCl" placeholder="Daniel Archer..." oninput="actualizarSpeeches()">
+                </div>
+            </div>
+
+            <div class="speech-area">
+                <button class="nav-btn" onclick="cambiarSpeech(-1)">❮</button>
+                <div class="speech-box" id="speechActiveCard" onclick="copiarSpeechActual()">
+                    <span class="s-title" id="activeLabel">SALUDO</span>
+                    <div class="s-text" id="activeText">...</div>
+                </div>
+                <button class="nav-btn" onclick="cambiarSpeech(1)">❯</button>
+            </div>
+
+            <div class="controls-row">
+                <div class="emoji-group">
+                    <div class="btn-select btn-emoji active" onclick="irASpeech(0)">👋</div>
+                    <div class="btn-select btn-emoji" onclick="irASpeech(1)">⌛</div>
+                    <div class="btn-select btn-emoji" onclick="irASpeech(2)">⌛</div>
+                    <div class="btn-select btn-emoji" onclick="irASpeech(3)">❓</div>
+                    <div class="btn-select btn-emoji" onclick="irASpeech(4)">🫂</div>
+                </div>
+                <div class="emoji-group">
+                    <div class="btn-select btn-emoji btn-sq" id="p_m" onclick="setPeriodo('mañana')">⛅</div>
+                    <div class="btn-select btn-emoji btn-sq" id="p_t" onclick="setPeriodo('tarde')">☀️</div>
+                    <div class="btn-select btn-emoji btn-sq" id="p_n" onclick="setPeriodo('noche')">🌙</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="f-row">
+                <div class="f-field">
+                    <label class="f-label" onclick="copiarCampo('numDoc', this)">Documento (RUC/DNI)</label>
+                    <input type="text" id="numDoc" placeholder="...">
+                </div>
+                <div class="f-field">
+                    <label class="f-label" onclick="copiarCampo('idCom', this)">ID Comercio</label>
+                    <input type="text" id="idCom" placeholder="ID">
+                </div>
+                <div class="f-field">
+                    <label class="f-label" onclick="copiarCampo('ticket', this)">Ticket</label>
+                    <input type="text" id="ticket" placeholder="#">
+                </div>
+            </div>
+            <div class="f-field">
+                <label class="f-label" onclick="copiarCampo('motivo', this)">Motivo</label>
+                <textarea id="motivo" placeholder="Resumen de la atención..."></textarea>
+            </div>
+
+            <button class="btn-add" onclick="agregarHistorial()">Añadir al Historial</button>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                <span class="label-s">Historial del día</span>
+                <span id="counterLabel" style="font-size: 0.6rem; font-weight: bold;">TOTAL: 0</span>
+            </div>
+            <div id="historyBox" class="hist-view">Historial en progreso...</div>
+            
+            <div class="footer-actions">
+                <button class="btn-foot" style="background:var(--success); color:#000;" onclick="copiarHistorial()">📋 Copiar todo</button>
+                <button id="btnEditHist" class="btn-foot" style="background:var(--accent); color:#fff;" onclick="editarHistorial()">✏️ Editar</button>
+                <button class="btn-foot" style="background:var(--warning); color:#000;" onclick="descargarHistorial()">💾 Exportar .txt</button>
+                <button class="btn-foot" style="background:var(--danger); color:#fff;" onclick="limpiarTodo()">🗑️ Limpiar historial</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    /* LÓGICA DE TEMA */
+    function toggleTheme() { 
+        document.body.classList.toggle('light-mode'); 
+        localStorage.setItem('c-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark'); 
+    }
+    if (localStorage.getItem('c-theme') === 'light') document.body.classList.add('light-mode');
+
+    /* LÓGICA DE TIEMPO (EOD) */
+    function updateEODTarget() { 
+        localStorage.setItem('c-eod', document.getElementById('eodTime').value); 
+        actualizarEOD(); 
+    }
+    
+    function actualizarEOD() {
+        const now = new Date(); 
+        const val = document.getElementById('eodTime').value;
+        if (!val || val === "00:00") { 
+            eodDisplay.innerText = "00:00:00"; 
+            eodDisplay.style.color = "var(--text-dim)"; 
+            return; 
+        }
+        const [hours, minutes] = val.split(':');
+        let target = new Date();
+        target.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        if (target < now) target.setDate(target.getDate() + 1);
+        let diff = target - now;
+        const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+        eodDisplay.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        eodDisplay.style.color = "var(--success)";
+    }
+
+    let timer;
+    const alertSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
+    function startTimer(s) {
+        clearInterval(timer);
+        btnStop.style.display = "block";
+        const updateView = (secs) => {
+            const hh = Math.floor(secs/3600), mm = Math.floor((secs%3600)/60), ss = secs%60;
+            display.innerText = `${hh.toString().padStart(2,'0')}:${mm.toString().padStart(2,'0')}:${ss.toString().padStart(2,'0')}`;
+        };
+        updateView(s);
+        const then = Date.now() + s * 1000;
+        timer = setInterval(() => {
+            const left = Math.round((then - Date.now()) / 1000);
+            if (left < 0) { 
+                clearInterval(timer); 
+                updateView(0); 
+                alertSound.play();
+                alert("⚠️ ¡Tiempo de descanso finalizado!");
+                return; 
+            }
+            updateView(left);
+        }, 1000);
+    }
+    function stopTimer() { clearInterval(timer); display.innerText = "00:00:00"; btnStop.style.display = "none"; }
+    
+    document.getElementById('eodTime').value = localStorage.getItem('c-eod') || "18:00"; 
+    actualizarEOD();
+    setInterval(actualizarEOD, 1000);
+
+    /* LÓGICA SPEECHES */
+    let modo = 'pers', idxS = 0, jornada = 'tarde';
+    const labels = ["SALUDO", "ESPERA", "SEGUIMIENTO", "INTERMEDIO", "CIERRE"];
+
+    function setPeriodo(p) { 
+        jornada = p; 
+        document.querySelectorAll('.btn-sq').forEach(el => el.classList.remove('active')); 
+        document.getElementById(`p_${p[0]}`).classList.add('active'); 
+        actualizarSpeeches(); 
+    }
+
+    function setModo(m) { 
+        modo = m; 
+        document.getElementById('btnPers').classList.toggle('active', m === 'pers'); 
+        document.getElementById('btnGen').classList.toggle('active', m === 'gen'); 
+        document.getElementById('inputNombreRow').style.display = (m === 'pers') ? 'flex' : 'none'; 
+        actualizarSpeeches(); 
+    }
+    
+    function actualizarSpeeches() {
+        let greet = (jornada === 'mañana') ? "Buenos días" : (jornada === 'tarde') ? "Buenas tardes" : "Buenas noches";
+        let despedida = (jornada === 'mañana') ? "un buen día" : (jornada === 'tarde') ? "una buena tarde" : "una buena noche";
+        let nombreVal = nombreCl.value.trim();
+        let sub = (modo === 'gen') ? "estimado" : `${prefijo.value} ${nombreVal || "..."}`;
+        
+        localStorage.setItem('c-last-name', nombreVal);
+        localStorage.setItem('c-last-pref', prefijo.value);
+
+        window.activeS = [
+            `${greet}. Bienvenido a Culqi, le saluda Daniel Quispe. ¿Cómo le puedo ayudar hoy?`,
+            `Muchas gracias, ${sub}. Por favor, permítame un momento para validar la información.`,
+            `Un momento mas en linea ${sub}, por favor.`,
+            `¿Tiene alguna consulta adicional?`,
+            `Para finalizar. Lo invito a calificar mi atención del 0 al 9, donde 9 es muy satisfecho. ¡Que tenga ${despedida} con Culqi!`
+        ];
+        irASpeech(idxS);
+    }
+
+    function irASpeech(i) { 
+        idxS = i; 
+        activeLabel.innerText = labels[i]; 
+        activeText.innerText = window.activeS[i]; 
+        document.querySelectorAll('.btn-emoji').forEach((d, x) => { if(x < 5) d.classList.toggle('active', x === i); }); 
+    }
+
+    function cambiarSpeech(d) { idxS = (idxS + d + 5) % 5; irASpeech(idxS); }
+
+    function copiarSpeechActual() { 
+        navigator.clipboard.writeText(activeText.innerText); 
+        speechActiveCard.style.borderColor = "var(--success)"; 
+        setTimeout(() => speechActiveCard.style.borderColor = "var(--border)", 600); 
+    }
+
+    /* LÓGICA HISTORIAL CON EDICIÓN */
+    let hits = JSON.parse(localStorage.getItem('c-hits')) || [];
+    let nAtt = parseInt(localStorage.getItem('c-natt')) || 1;
+    let isEditing = false;
+
+    function copiarCampo(id, el) { 
+        const val = document.getElementById(id).value.trim(); 
+        if(val){ navigator.clipboard.writeText(val); el.style.color = "var(--accent)"; } 
+        else { el.style.color = "var(--danger)"; } 
+        setTimeout(() => el.style.color = "", 2000); 
+    }
+
+    function agregarHistorial() {
+        const d = numDoc.value.trim(); 
+        if(!d) {
+            numDoc.focus();
+            numDoc.style.borderColor = "var(--danger)";
+            setTimeout(() => numDoc.style.borderColor = "", 2000);
+            return;
+        }
+        if(isEditing) { alert("Termina de editar antes de añadir nuevas entradas."); return; }
+
+        const horaNow = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        let t = (d.length === 8) ? "DNI" : (d.startsWith("10")) ? "RUC 10" : "RUC 20";
+        
+        const nuevaEntrada = `[${horaNow}] Comercio ${nAtt}\nTIPO: ${t}\nNRO DOC: ${d}\nID: ${idCom.value || "N/A"}\nTICKET: ${ticket.value || "N/A"}\nMOTIVO: ${motivo.value || "..."}`;
+        
+        hits.push(nuevaEntrada);
+        nAtt++;
+
+        localStorage.setItem('c-hits', JSON.stringify(hits));
+        localStorage.setItem('c-natt', nAtt);
+
+        renderH(); 
+        numDoc.value = idCom.value = ticket.value = motivo.value = "";
+        numDoc.focus();
+    }
+
+    function renderH() { 
+        if(isEditing) return;
+        historyBox.innerText = hits.length ? hits.join("\n\n---\n\n") : "Vacío"; 
+        counterLabel.innerText = `TOTAL: ${hits.length}`; 
+        historyBox.scrollTop = historyBox.scrollHeight;
+    }
+
+    function editarHistorial() {
+        const btn = document.getElementById('btnEditHist');
+        if (!isEditing) {
+            isEditing = true;
+            btn.innerText = "💾 Guardar";
+            btn.style.background = "var(--success)";
+            btn.style.color = "#000";
+            
+            const content = hits.join("\n\n---\n\n");
+            historyBox.innerHTML = `<textarea id="editArea" style="height:100%; width:100%; background:transparent; color:inherit; border:none; font-family:inherit; font-size:inherit; padding:0; resize:none;">${content}</textarea>`;
+            document.getElementById('editArea').focus();
+        } else {
+            const newContent = document.getElementById('editArea').value;
+            hits = newContent.split("\n\n---\n\n").map(h => h.trim()).filter(h => h !== "");
+            localStorage.setItem('c-hits', JSON.stringify(hits));
+            
+            isEditing = false;
+            btn.innerText = "✏️ Editar";
+            btn.style.background = "var(--accent)";
+            btn.style.color = "#fff";
+            renderH();
+        }
+    }
+
+    function copiarHistorial() { 
+        if(!hits.length) return; 
+        navigator.clipboard.writeText(hits.join("\n\n---\n\n")).then(() => { 
+            const toastEl = document.getElementById('toast');
+            toastEl.innerText = "Copiado con éxito";
+            toastEl.style.background = "var(--success)";
+            toastEl.style.color = "#000";
+            toastEl.style.display='block'; 
+            setTimeout(()=>toastEl.style.display='none', 1000); 
+        }); 
+    }
+
+    /* FUNCIÓN OPTIMIZADA CON TU URL DE PRODUCCIÓN */
+    function descargarHistorial() {
+        if(!hits.length) return;
+        
+        const contenido = hits.join("\n\n" + "=".repeat(20) + "\n\n");
+        const nombreArchivo = `Gestiones_Culqi_${new Date().toLocaleDateString().replace(/\//g,'-')}.txt`;
+
+        // === ACCIÓN 1: Almacenamiento local directo ===
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nombreArchivo;
+        a.click();
+
+        // === ACCIÓN 2: Envío seguro a Google Drive (v3 / v4 limpia) ===
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhyoY2UADND1Tmd-rK2BJAv7EQlYHUA6nogcp85bWFvgWWNyHlpD5NgotzlbAfhRHZ/exec"; 
+
+        const toastEl = document.getElementById('toast');
+        toastEl.innerText = "Sincronizando con Drive... ⏳";
+        toastEl.style.background = "var(--accent)";
+        toastEl.style.color = "#fff";
+        toastEl.style.display = 'block';
+
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify({
+                contenido: contenido,
+                nombreArchivo: nombreArchivo
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === "success") {
+                toastEl.innerText = "¡Exportado en local y Drive! ✅";
+                toastEl.style.background = "var(--success)";
+                toastEl.style.color = "#000";
+            } else {
+                throw new Error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error al subir a Drive:", error);
+            toastEl.innerText = "Error al respaldar en Drive ❌";
+            toastEl.style.background = "var(--danger)";
+            toastEl.style.color = "#fff";
+        })
+        .finally(() => {
+            setTimeout(() => {
+                toastEl.style.display = 'none';
+            }, 3500);
+        });
+    }
+
+    function limpiarTodo() { 
+        if(confirm("¿Estás seguro de borrar todo el historial y reiniciar el contador?")){ 
+            hits=[]; 
+            nAtt=1; 
+            isEditing = false;
+            localStorage.removeItem('c-hits');
+            localStorage.removeItem('c-natt');
+            renderH(); 
+        } 
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            agregarHistorial();
+        }
+        if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            if (e.key >= '1' && e.key <= '5') {
+                irASpeech(parseInt(e.key) - 1);
+            }
+        }
+    });
+
+    window.onload = function() {
+        nombreCl.value = localStorage.getItem('c-last-name') || '';
+        prefijo.value = localStorage.getItem('c-last-pref') || 'Sr.';
+        const curH = new Date().getHours(); 
+        setPeriodo(curH < 12 ? 'mañana' : curH < 18 ? 'tarde' : 'noche'); 
+        setModo('pers');
+        renderH();
+    };
+</script>
+</body>
+</html>
