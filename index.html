@@ -523,21 +523,21 @@
         }); 
     }
 
-    /* FUNCIÓN OPTIMIZADA CON TU URL DE PRODUCCIÓN */
+    /* SISTEMA INTELIGENTE DE DETECCIÓN DE ERRORES REALES */
     function descargarHistorial() {
         if(!hits.length) return;
         
         const contenido = hits.join("\n\n" + "=".repeat(20) + "\n\n");
         const nombreArchivo = `Gestiones_Culqi_${new Date().toLocaleDateString().replace(/\//g,'-')}.txt`;
 
-        // === ACCIÓN 1: Almacenamiento local directo ===
+        // === ACCIÓN 1: Almacenamiento local ===
         const blob = new Blob([contenido], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = nombreArchivo;
         a.click();
 
-        // === ACCIÓN 2: Envío seguro a Google Drive (v3 / v4 limpia) ===
+        // === ACCIÓN 2: Sincronización en Google Drive ===
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhyoY2UADND1Tmd-rK2BJAv7EQlYHUA6nogcp85bWFvgWWNyHlpD5NgotzlbAfhRHZ/exec"; 
 
         const toastEl = document.getElementById('toast');
@@ -548,28 +548,28 @@
 
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'text/plain'
-            },
             body: JSON.stringify({
                 contenido: contenido,
                 nombreArchivo: nombreArchivo
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data.status === "success") {
+        .then(response => {
+            return response.text(); 
+        })
+        .then(text => {
+            // Evaluamos la respuesta de texto plano que devuelve el script modificado
+            if (text.includes("SUCCESS")) {
                 toastEl.innerText = "¡Exportado en local y Drive! ✅";
                 toastEl.style.background = "var(--success)";
                 toastEl.style.color = "#000";
             } else {
-                throw new Error(data.message);
+                throw new Error("Respuesta errónea del servidor");
             }
         })
         .catch(error => {
-            console.error("Error al subir a Drive:", error);
-            toastEl.innerText = "Error al respaldar en Drive ❌";
+            // Este bloque solo se activa si hay un error real de red, caída o desconexión
+            console.error("Fallo crítico en Drive:", error);
+            toastEl.innerText = "¡ALERTA: Falló el guardado en Drive! ❌";
             toastEl.style.background = "var(--danger)";
             toastEl.style.color = "#fff";
         })
